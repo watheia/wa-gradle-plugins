@@ -9,3 +9,8 @@ gradlePlugin {
         }
     }
 }
+
+dependencies {
+    implementation project(':wa.base')
+	implementation 'org.xtext:xtext-gradle-plugin:2.0.8'
+}

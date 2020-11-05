@@ -12,21 +12,56 @@ import org.gradle.api.JavaVersion
  */
 class WaBasePlugin implements Plugin<Project> {
 
-    static final String XTEXT_VERSION = '2.23.0'
+    static final String GROOVY_VERSION = '3.0.6'
+    static final String SPOCK_VERSION = '2.0-M4-groovy-3.0'
+    static final String JUNIT_VERSION = '4.13.1'
     static final JavaVersion JAVA_VERSION = JavaVersion.VERSION_11
 
     void apply(Project project) {
         project.pluginManager.apply('base')
         project.pluginManager.apply('publishing')
         project.pluginManager.apply('distribution')
+        project.pluginManager.apply('project-report')
         project.pluginManager.apply('de.undercouch.download')
 
-        project.plugins.withType(org.gradle.api.plugins.JavaBasePlugin) {
-            project.sourceCompatibility = JAVA_VERSION
-            project.targetCompatibility = JAVA_VERSION
-            project.repositories {
+        project.tasks.build.dependsOn('projectReport')
+
+        project.plugins.withType(org.gradle.api.plugins.JavaPlugin) {
+            configureJava(project)
+        }
+
+        project.plugins.withType(org.gradle.api.plugins.GroovyPlugin) {
+            configureGroovy(project)
+        }
+
+        project.plugins.withType(org.gradle.api.plugins.WarPlugin) {
+            project.webAppDirName = 'src/main/webapp'
+        }
+    }
+
+    void configureJava(Project project) {
+        project.ext.javaVersion = JAVA_VERSION
+        project.ext.junitVersion = JUNIT_VERSION
+        project.repositories {
                 jcenter()
                 mavenCentral()
+        }
+        project.afterEvaluate {
+            project.sourceCompatibility = project.javaVersion
+            project.targetCompatibility = project.javaVersion
+            project.dependencies {
+                testImplementation "junit:${project.junitVersion}"
+            }
+        }
+    }
+
+    void configureGroovy(Project project) {
+        project.ext.groovyVersion = GROOVY_VERSION
+        project.ext.spockVersion = SPOCK_VERSION
+        project.afterEvaluate {
+            project.dependencies {
+                implementation "org.codehaus.groovy:${project.groovyVersion}"
+                testImplementation "org.spockframework:spock-core:${project.spockVersion}"
             }
         }
     }

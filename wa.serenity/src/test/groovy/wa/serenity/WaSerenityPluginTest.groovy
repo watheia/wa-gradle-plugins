@@ -8,7 +8,7 @@ import org.gradle.testfixtures.ProjectBuilder
 import spock.lang.Specification
 
 /**
- * A simple 'hello world' plugin.
+ * @auther Aaron R Miller<amiller@watheia.dev>
  */
 class WaSerenityPluginTest extends Specification {
 

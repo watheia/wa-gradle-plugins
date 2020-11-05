@@ -12,7 +12,7 @@ import spock.lang.Specification
  */
 class WaBasePluginTest extends Specification {
 
-    def "plugin registers base tasks"() {
+    def must_registers_tasks() {
         given:
         def project = ProjectBuilder.builder().build()
 
@@ -26,6 +26,7 @@ class WaBasePluginTest extends Specification {
         project.tasks.findByName('clean') != null
         project.tasks.findByName('assembleDist') != null
         project.tasks.findByName('installDist') != null
+        project.tasks.findByName('projectReport') != null
     }
 
 }

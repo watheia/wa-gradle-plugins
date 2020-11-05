@@ -11,24 +11,23 @@ import org.gradle.api.tasks.testing.Test
  */
 class WaSerenityPlugin implements Plugin<Project> {
 
-    static final String SLF4J_VERSION = '1.7.7'
     static final String SERENITY_CORE_VERSION = '2.3.6'
     static final String SERENITY_CUCUMBER_VERSION = '2.3.6'
-    static final String JUNIT_VERSION = '4.13'
     static final String ASSERTJ_VERSION = '3.8.0'
-    static final String HAMCREST_VERSION = '2.2'
     static final String LOGBACK_VERSION = '1.2.3'
 
     static final String IMPLEMENTATION = 'implementation'
     static final String TEST_IMPLEMENTATION = 'testImplementation'
 
     void apply(Project project) {
+        project.ext.serenityCoreVersion = SERENITY_CORE_VERSION
+        project.ext.serenityCucumberVersion = SERENITY_CUCUMBER_VERSION
+        project.ext.assertjVersion = ASSERTJ_VERSION
+        project.ext.logbackVersion = LOGBACK_VERSION
+
         configurePlugins(project)
         configureDependencies(project)
         configureTest(project.tasks.getByName('test'))
-
-        project.sourceCompatibility = JavaVersion.VERSION_11
-        project.targetCompatibility = JavaVersion.VERSION_11
     }
 
     void configurePlugins(final Project project) {
@@ -39,27 +38,32 @@ class WaSerenityPlugin implements Plugin<Project> {
     }
 
     void configureDependencies(final Project project) {
-        project.repositories.jcenter()
-        project.repositories.mavenCentral()
-        project.dependencies.add(IMPLEMENTATION, "ch.qos.logback:logback-classic:${LOGBACK_VERSION}")
-        project.dependencies.add(TEST_IMPLEMENTATION, "net.serenity-bdd:serenity-core:${SERENITY_CORE_VERSION}")
-        project.dependencies.add(TEST_IMPLEMENTATION, "net.serenity-bdd:serenity-junit:${SERENITY_CORE_VERSION}")
-        project.dependencies.add(TEST_IMPLEMENTATION, "net.serenity-bdd:serenity-rest-assured:${SERENITY_CORE_VERSION}")
-        project.dependencies.add(TEST_IMPLEMENTATION, "net.serenity-bdd:serenity-screenplay:${SERENITY_CORE_VERSION}")
-        project.dependencies.add(TEST_IMPLEMENTATION,
-                "net.serenity-bdd:serenity-screenplay-rest:${SERENITY_CORE_VERSION}")
-        project.dependencies.add(TEST_IMPLEMENTATION,
-                "net.serenity-bdd:serenity-screenplay-webdriver:${SERENITY_CORE_VERSION}")
-        project.dependencies.add(TEST_IMPLEMENTATION,
-                "net.serenity-bdd:serenity-cucumber6:${SERENITY_CUCUMBER_VERSION}")
-        project.dependencies.add(TEST_IMPLEMENTATION, "junit:junit:${JUNIT_VERSION}")
-        project.dependencies.add(TEST_IMPLEMENTATION, "org.assertj:assertj-core:${ASSERTJ_VERSION}")
+        project.afterEvaluate {
+            project.dependencies.add(IMPLEMENTATION,
+                    "ch.qos.logback:logback-classic:${project.logbackVersion}")
+            project.dependencies.add(TEST_IMPLEMENTATION,
+                    "net.serenity-bdd:serenity-core:${project.serenityCoreVersion}")
+            project.dependencies.add(TEST_IMPLEMENTATION,
+                    "net.serenity-bdd:serenity-junit:${project.serenityCoreVersion}")
+            project.dependencies.add(TEST_IMPLEMENTATION,
+                    "net.serenity-bdd:serenity-rest-assured:${project.serenityCoreVersion}")
+            project.dependencies.add(TEST_IMPLEMENTATION,
+                    "net.serenity-bdd:serenity-screenplay:${project.serenityCoreVersion}")
+            project.dependencies.add(TEST_IMPLEMENTATION,
+                    "net.serenity-bdd:serenity-screenplay-rest:${project.serenityCoreVersion}")
+            project.dependencies.add(TEST_IMPLEMENTATION,
+                    "net.serenity-bdd:serenity-screenplay-webdriver:${project.serenityCoreVersion}")
+            project.dependencies.add(TEST_IMPLEMENTATION,
+                    "net.serenity-bdd:serenity-cucumber6:${project.serenityCucumberVersion}")
+            project.dependencies.add(TEST_IMPLEMENTATION,
+                    "org.assertj:assertj-core:${project.assertjVersion}")
+        }
     }
 
     void configureTest(final Test task) {
         task.testLogging.showStandardStreams = true
         task.systemProperties(System.properties)
-        task.finalizedBy 'aggregate'
+        task.finalizedBy('aggregate')
     }
 
 }

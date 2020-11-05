@@ -12,18 +12,14 @@ import org.gradle.api.Project
 class WaXtextPlugin implements Plugin<Project> {
 
     static final String XTEXT_VERSION = '2.23.0'
-    static final String JAVA_VERSION = '11'
 
     void apply(Project project) {
-        project.pluginManager.apply('base')
+        project.pluginManager.apply('wa.base')
         project.pluginManager.apply('java')
         project.pluginManager.apply('eclipse')
         project.pluginManager.apply('org.xtext.xtend')
 
         project.ext.xtextVersion = XTEXT_VERSION
-
-        project.sourceCompatibility = JAVA_VERSION
-        project.targetCompatibility = JAVA_VERSION
 
         project.repositories {
             mavenCentral()
@@ -64,10 +60,6 @@ class WaXtextPlugin implements Plugin<Project> {
             manifest {
                 attributes 'Bundle-SymbolicName': project.name
             }
-        }
-
-        project.plugins.withId('war') {
-            project.webAppDirName = 'src/main/webapp'
         }
     }
 
