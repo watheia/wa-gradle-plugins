@@ -21,8 +21,8 @@ class WaBasePlugin implements Plugin<Project> {
         project.pluginManager.apply('distribution')
         project.pluginManager.apply('de.undercouch.download')
 
-        project.plugins.withType(org.gradle.api.plugins.JavaBasePlugin) { ext ->
-            ext.sourceCompatibility = JAVA_VERSION
+        project.plugins.withType(org.gradle.api.plugins.JavaBasePlugin) {
+            project.sourceCompatibility = JAVA_VERSION
             project.targetCompatibility = JAVA_VERSION
             project.repositories {
                 jcenter()

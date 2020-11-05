@@ -5,7 +5,12 @@ gradlePlugin {
     plugins {
         serenity {
             id = 'wa.serenity'
-            implementationClass = 'wa.serenity.WaSerenitylugin'
+            implementationClass = 'wa.serenity.WaSerenityPlugin'
         }
     }
+}
+
+dependencies {
+    implementation project(':wa.base')
+	implementation 'net.serenity-bdd:serenity-gradle-plugin:2.3.6'
 }
