@@ -3,9 +3,14 @@ apply from: rootProject.file('gradle/wa-java-gradle-plugin.gradle')
 gradlePlugin {
     // Define the plugin
     plugins {
-        base {
-            id = 'wa.docker'
-            implementationClass = 'wa.docker.WaDockerPlugin'
+        node {
+            id = 'wa.node'
+            implementationClass = 'wa.node.WaNodePlugin'
         }
     }
+}
+
+dependencies {
+    implementation project(':wa.base')
+	implementation 'com.github.node-gradle:gradle-node-plugin:3.0.0-rc3'
 }
