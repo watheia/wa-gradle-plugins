@@ -46,6 +46,16 @@ class WaBasePlugin implements Plugin<Project> {
                 jcenter()
                 mavenCentral()
         }
+        project.sourceSets {
+            main {
+                java.srcDirs = ['src/main/java', 'src/main/src-gen']
+                resources.srcDirs = ['src/main/resources', 'src/main/src-gen']
+            }
+            test {
+                java.srcDirs = ['src/test/java', 'src/test/src-gen']
+                resources.srcDirs = ['src/test/resources', 'src/test/src-gen']
+            }
+        }
         project.afterEvaluate {
             project.sourceCompatibility = project.javaVersion
             project.targetCompatibility = project.javaVersion
