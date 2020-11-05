@@ -1,0 +1,11 @@
+apply from: rootProject.file('gradle/wa-java-gradle-plugin.gradle')
+
+gradlePlugin {
+    // Define the plugin
+    plugins {
+        xtext {
+            id = 'wa.xtext'
+            implementationClass = 'wa.xtext.WaXtextPlugin'
+        }
+    }
+}

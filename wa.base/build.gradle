@@ -1,0 +1,15 @@
+apply from: rootProject.file('gradle/wa-java-gradle-plugin.gradle')
+
+dependencies {
+	implementation 'de.undercouch:gradle-download-task:4.1.1'
+}
+
+gradlePlugin {
+    // Define the plugin
+    plugins {
+        base {
+            id = 'wa.base'
+            implementationClass = 'wa.base.WaBasePlugin'
+        }
+    }
+}

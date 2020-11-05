@@ -1,0 +1,10 @@
+plugins {
+    id 'base'
+}
+
+subprojects.each { proj -> 
+    assemble.dependsOn "${proj.path}:assemble"
+    build.dependsOn "${proj.path}:build"
+    check.dependsOn "${proj.path}:check"
+    clean.dependsOn "${proj.path}:clean"
+}

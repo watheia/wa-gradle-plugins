@@ -1,0 +1,11 @@
+apply from: rootProject.file('gradle/wa-java-gradle-plugin.gradle')
+
+gradlePlugin {
+    // Define the plugin
+    plugins {
+        base {
+            id = 'wa.docker'
+            implementationClass = 'wa.docker.WaDockerPlugin'
+        }
+    }
+}
