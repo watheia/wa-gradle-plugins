@@ -2,9 +2,24 @@ plugins {
     id 'base'
 }
 
+tasks.register('buildPlugins') {
+    group = "Build"
+}
+
+tasks.register('functionalTest') {
+    group = "Check"
+    dependsOn gradle.includedBuild('functionalTest').task(':check')
+    mustRunAfter tasks.buildPlugins
+}
+
 subprojects.each { proj -> 
-    assemble.dependsOn "${proj.path}:assemble"
-    build.dependsOn "${proj.path}:build"
-    check.dependsOn "${proj.path}:check"
-    clean.dependsOn "${proj.path}:clean"
+    tasks.buildPlugins.dependsOn "${proj.path}:build"
+}
+
+assemble {
+    dependsOn tasks.buildPlugins
+}
+
+check {
+    dependsOn tasks.functionalTest
 }

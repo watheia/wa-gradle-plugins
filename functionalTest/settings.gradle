@@ -7,11 +7,4 @@
  * in the user manual at https://docs.gradle.org/6.7/userguide/multi_project_builds.html
  */
 
-rootProject.name = 'wa-gradle-plugins'
-
-includeBuild 'functionalTest'
-include ':wa.base'
-include ':wa.docker'
-include ':wa.node'
-include ':wa.serenity'
-include ':wa.xtext'
+rootProject.name = 'functionalTest'
