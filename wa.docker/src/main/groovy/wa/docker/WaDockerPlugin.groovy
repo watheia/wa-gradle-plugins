@@ -12,12 +12,20 @@ import org.gradle.api.Project
 class WaDockerPlugin implements Plugin<Project> {
 
     void apply(Project project) {
-        project.pluginManager.apply('wa.base')
+        project.pluginManager.apply('base')
+        project.pluginManager.apply('publishing')
+        project.pluginManager.apply('distribution')
+        project.pluginManager.apply('project-report')
+
+        project.pluginManager.apply('de.undercouch.download')
         project.pluginManager.apply('com.palantir.docker')
         project.pluginManager.apply('com.palantir.docker-compose')
 
+        project.tasks.build.dependsOn('projectReport')
+
         if (project.file('Dockerfile').exists()) {
             project.tasks.build.dependsOn('dockerTag')
+            project.tasks.publish.dependsOn('dockerPush')
         }
     }
 

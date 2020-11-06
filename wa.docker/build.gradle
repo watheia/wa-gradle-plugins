@@ -11,6 +11,5 @@ gradlePlugin {
 }
 
 dependencies {
-    implementation project(':wa.base')
 	implementation 'com.palantir.gradle.docker:gradle-docker:0.25.0'
 }
