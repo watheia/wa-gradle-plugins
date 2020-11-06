@@ -22,7 +22,7 @@ class WaNodePluginTest extends Specification {
         then:
         project.tasks.findByName('npmInstall') != null
         project.tasks.findByName('npmBuild') != null
-        project.tasks.findByName('npmTest') != null
+        project.tasks.findByName('yarnBuild') != null
     }
 
 }

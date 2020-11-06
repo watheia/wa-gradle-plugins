@@ -11,5 +11,6 @@ gradlePlugin {
 }
 
 dependencies {
+    implementation 'de.undercouch:gradle-download-task:4.1.1'
 	implementation 'com.palantir.gradle.docker:gradle-docker:0.25.0'
 }

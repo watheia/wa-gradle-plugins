@@ -8,6 +8,7 @@ import org.gradle.api.Project
 import org.gradle.api.Task
 
 import com.github.gradle.node.npm.task.NpmTask
+import com.github.gradle.node.yarn.task.YarnTask
 
 /**
  * A simple 'hello world' plugin.
@@ -23,29 +24,28 @@ class WaNodePlugin implements Plugin<Project> {
             project.tasks.check.dependsOn('npmInstall')
         }
 
+        project.tasks.assemble.mustRunAfter('yarn')
+        project.tasks.build.mustRunAfter('yarn')
+        project.tasks.check.mustRunAfter('yarn')
+
         // Register npm tasks
         ////
 
-        project.tasks.register('run', NpmTask) {
-            inputs.dir('src')
-            outputs.dir('build')
-            args = ['start']
-            mustRunAfter 'npmInstall'
-        }
-
-        project.tasks.assemble.dependsOn project.tasks.register('npmBuild', NpmTask) {
-            inputs.dir('src')
-            outputs.dir('build')
+        project.tasks.register('npmBuild', NpmTask) {
             args = ['run', 'build']
             mustRunAfter 'npmInstall'
         }
-
-        project.tasks.check.dependsOn project.tasks.register('npmTest', NpmTask) {
-            inputs.dir('src')
-            outputs.dir('build')
-            args = ['run', 'test']
-            mustRunAfter 'npmInstall'
+        project.tasks.register('yarnBuild', YarnTask) {
+            args = ['build']
+            mustRunAfter 'yarn'
         }
+
+        // project.tasks.check.dependsOn project.tasks.register('npmTest', NpmTask) {
+        //     inputs.dir('src')
+        //     outputs.dir('build')
+        //     args = ['run', 'test']
+        //     mustRunAfter 'npmInstall'
+        // }
     }
 
 }
