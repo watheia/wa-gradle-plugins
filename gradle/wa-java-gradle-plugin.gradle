@@ -19,6 +19,22 @@ dependencies {
             gradleTestKit()
 }
 
+
 sourceCompatibility = JavaVersion.VERSION_11
 targetCompatibility = JavaVersion.VERSION_11
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = project.group
+            artifactId = project.name
+            version = project.version
+
+            from components.java
+        }
+    }
+    repositories {
+        maven { url = uri("${rootProject.buildDir}/repo") }
+    }
+}
 
