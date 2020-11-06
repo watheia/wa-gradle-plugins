@@ -24,7 +24,8 @@ build:
     key: "$CI_COMMIT_REF_NAME"
     policy: push
     paths:
-      - build
+      - "**/build"
+      - "**/node_modules"
       - .gradle
 
 test:
@@ -33,10 +34,11 @@ test:
   cache:
     key: "$CI_COMMIT_REF_NAME"
     policy: pull
+    paths:
+      - "**/build"
+      - "**/node_modules"
+      - .gradle
   artifacts:
     paths:
       - build/reports
       - "*/build/reports"
-    paths:
-      - build
-      - .gradle
