@@ -26,6 +26,7 @@ class WaDockerPlugin implements Plugin<Project> {
         if (project.file('Dockerfile').exists()) {
             project.tasks.build.dependsOn('dockerTag')
             project.tasks.publish.dependsOn('dockerPush')
+            project.docker.name = "registry.digitalocean.com/watheia/${project.name}:latest"
         }
     }
 
