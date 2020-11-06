@@ -15,7 +15,7 @@ import com.github.gradle.node.npm.task.NpmTask
 class WaNodePlugin implements Plugin<Project> {
 
     void apply(Project project) {
-        project.pluginManager.apply('wa.base')
+        project.pluginManager.apply('base')
         project.pluginManager.apply(com.github.gradle.node.NodePlugin)
 
         if (!project.file('node_modules').exists()) {
@@ -27,16 +27,22 @@ class WaNodePlugin implements Plugin<Project> {
         ////
 
         project.tasks.register('run', NpmTask) {
+            inputs.dir('src')
+            outputs.dir('build')
             args = ['start']
             mustRunAfter 'npmInstall'
         }
 
         project.tasks.assemble.dependsOn project.tasks.register('npmBuild', NpmTask) {
+            inputs.dir('src')
+            outputs.dir('build')
             args = ['run', 'build']
             mustRunAfter 'npmInstall'
         }
 
         project.tasks.check.dependsOn project.tasks.register('npmTest', NpmTask) {
+            inputs.dir('src')
+            outputs.dir('build')
             args = ['run', 'test']
             mustRunAfter 'npmInstall'
         }

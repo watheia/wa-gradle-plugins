@@ -11,6 +11,5 @@ gradlePlugin {
 }
 
 dependencies {
-    implementation project(':wa.base')
 	implementation 'com.github.node-gradle:gradle-node-plugin:3.0.0-rc3'
 }
