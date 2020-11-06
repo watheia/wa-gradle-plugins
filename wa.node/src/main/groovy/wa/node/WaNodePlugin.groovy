@@ -15,37 +15,79 @@ import com.github.gradle.node.yarn.task.YarnTask
  */
 class WaNodePlugin implements Plugin<Project> {
 
+    static final String YARN_VERSION = '1.22.10'
+    static final String NPM_VERSION = '6.14.8'
+    static final String NODE_VERSION = '10.23.0'
+
     void apply(Project project) {
         project.pluginManager.apply('base')
         project.pluginManager.apply(com.github.gradle.node.NodePlugin)
 
-        if (!project.file('node_modules').exists()) {
-            project.tasks.assemble.dependsOn('npmInstall')
-            project.tasks.check.dependsOn('npmInstall')
-        }
+        project.tasks.build.dependsOn('yarn')
 
         project.tasks.assemble.mustRunAfter('yarn')
-        project.tasks.build.mustRunAfter('yarn')
         project.tasks.check.mustRunAfter('yarn')
 
-        // Register npm tasks
-        ////
+        configureNode(project)
+    }
 
-        project.tasks.register('npmBuild', NpmTask) {
-            args = ['run', 'build']
-            mustRunAfter 'npmInstall'
-        }
-        project.tasks.register('yarnBuild', YarnTask) {
-            args = ['build']
-            mustRunAfter 'yarn'
-        }
+    void configureNode(Project project) {
+        project.ext.yarnVersion = YARN_VERSION
+        project.ext.npmVersion = NPM_VERSION
+        project.ext.nodeVersion = NODE_VERSION
+        project.afterEvaluate {
+            project.node {
+                // Whether to download and install a specific Node.js version or not
+                // If false, it will use the globally installed Node.js
+                // If true, it will download node using above parameters
+                // Note that npm is bundled with Node.js
+                download = true
 
-        // project.tasks.check.dependsOn project.tasks.register('npmTest', NpmTask) {
-        //     inputs.dir('src')
-        //     outputs.dir('build')
-        //     args = ['run', 'test']
-        //     mustRunAfter 'npmInstall'
-        // }
+                // Version of node to download and install (only used if download is true)
+                // It will be unpacked in the workDir
+                version = project.nodeVersion
+
+                // Version of npm to use
+                // If specified, installs it in the npmWorkDir
+                // If empty, the plugin will use the npm command bundled with Node.js
+                npmVersion = project.npmVersion
+
+                // Version of Yarn to use
+                // Any Yarn task first installs Yarn in the yarnWorkDir
+                // It uses the specified version if defined and the latest version otherwise (by default)
+                yarnVersion = project.yarnVersion
+
+                // Base URL for fetching node distributions
+                // Only used if download is true
+                // Change it if you want to use a mirror
+                // Or set to null if you want to add the repository on your own.
+                // distBaseUrl = 'https://nodejs.org/dist'
+
+                // The npm command executed by the npmInstall task
+                // By default it is install but it can be changed to ci
+                npmInstallCommand = 'install'
+
+                // The directory where Node.js is unpacked (when download is true)
+                workDir = project.rootProject.file('.gradle/nodejs')
+
+                // The directory where npm is installed (when a specific version is defined)
+                npmWorkDir = project.file('.gradle/npm')
+
+                // The directory where yarn is installed (when a Yarn task is used)
+                yarnWorkDir = project.file('.gradle/npm')
+
+                // The Node.js project directory location
+                // This is where the package.json file and node_modules directory are located
+                // By default it is at the root of the current project
+                nodeProjectDir = project.projectDir
+
+            // Whether the plugin automatically should add the proxy configuration to npm and yarn commands
+            // according the proxy configuration defined for Gradle
+            // Disable this option if you want to configure the proxy for npm or yarn on your own
+            // (in the .npmrc file for instance)
+            // useGradleProxySettings = true
+            }
+        }
     }
 
 }
